@@ -2,7 +2,7 @@
 export MONGODB_USER='test'
 export MONGODB_PASSWORD='test'
 export MONGODB_PORT=27017
-export MONGODB_NAME='test'
+export MONGODB_NAME='testdb'
 
 docker-compose -f $(dirname "${0}")/docker-compose.yml up --force-recreate -d
 
