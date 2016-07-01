@@ -6,10 +6,14 @@ from mongoengine import Document, EmbeddedDocument, fields
 class Comment(EmbeddedDocument):
     pub_date = fields.DateTimeField(
         default=datetime.datetime.now, required=True)
-    author = fields.StringField(verbose_name="Author",
-                                max_length=255, required=True)
+    author = fields.StringField(
+        verbose_name="Author", max_length=255, required=True)
     email = fields.EmailField(verbose_name="Email")
     text = fields.StringField(verbose_name="Comment", required=True)
+
+    def short_text(self):
+        return ' '.join(self.text.split()[:20]) + " ..."  \
+            if len(self.text) > 20 else self.text
 
     def __str__(self):
         return "{} on {}".format(
@@ -38,9 +42,8 @@ class Note(Document):
         return self.title.title()
 
     def short_text(self):
-        if len(self.text) > 20:
-            return ' '.join(self.text.split()[:20]) + " ..."
-        return self.text
+        return ' '.join(self.text.split()[:20]) + " ..."  \
+            if len(self.text) > 20 else self.text
 
     def __str__(self):
         return "{} on {}".format(
