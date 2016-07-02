@@ -1,5 +1,6 @@
 import datetime
 from django.core.urlresolvers import reverse
+from django.utils.text import slugify
 from mongoengine import Document, EmbeddedDocument, fields
 
 
@@ -35,6 +36,11 @@ class Note(Document):
         'ordering': ['-pub_date']
     }
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)[:50]
+        return super(Note, self).save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse('note', kwargs={"slug": self.slug})
 
@@ -44,6 +50,9 @@ class Note(Document):
     def short_text(self):
         return ' '.join(self.text.split()[:20]) + " ..."  \
             if len(self.text) > 20 else self.text
+
+    def get_slug(self):
+        return self.slug
 
     def __str__(self):
         return "{} on {}".format(
