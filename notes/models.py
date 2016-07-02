@@ -1,10 +1,13 @@
 import datetime
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
-from mongoengine import Document, EmbeddedDocument, fields
+from bson.objectid import ObjectId
+from mongoengine import Document, EmbeddedDocument, fields, ObjectIdField
 
 
 class Comment(EmbeddedDocument):
+    _id = ObjectIdField(
+        required=True, default=lambda: ObjectId(), primary_key=True)
     pub_date = fields.DateTimeField(
         default=datetime.datetime.now, required=True)
     author = fields.StringField(

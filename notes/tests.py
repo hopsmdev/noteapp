@@ -105,3 +105,44 @@ class NoteModelTest(TestCase):
         comments = [comment.email for note in notes for comment in note.comments
                     if comment.author == "Author1"]
         self.assertEqual(str(list(set(comments))[0]), "author1@test.com")
+
+    def test_delete_note(self):
+        self.short_note.save()
+        self.long_note.save()
+        self.note_noslug.save()
+
+        notes = Note.objects()
+        self.assertEqual(len(notes), 3)
+
+        self.note_noslug.delete()
+        notes = Note.objects()
+        self.assertEqual(len(notes), 2)
+
+    def test_delete_note_comment(self):
+
+        self.short_note.save()
+        print(self.comment_auth1_1)
+        note = Note.objects(slug="short-note").first()
+        comment_ids = [comment._id for comment in note.comments]
+        self.assertEqual(len(comment_ids), 3)
+
+        comment_to_remove = comment_ids[0]
+        print(comment_to_remove, type(comment_to_remove))
+
+        Note.objects(slug="short-note").update_one(
+            pull__comments={'_id': comment_to_remove})
+
+        note.reload()
+        comment_ids = [comment._id for comment in note.comments]
+        print(comment_ids)
+
+    def test_delete_tag_from_note(self):
+        pass
+
+
+    def test_append_comment(self):
+        pass
+
+
+    def test_append_tag(self):
+        pass
