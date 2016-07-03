@@ -20,6 +20,7 @@ class NoteSerializer(DocumentSerializer):
     class Meta:
         model = Note
         depth = 2
+        allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
 
 
 
