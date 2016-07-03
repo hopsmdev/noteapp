@@ -37,6 +37,7 @@ class Note(Document):
     slug = StringField(max_length=255, required=True)
     text = StringField(verbose_name="Text", required=True)
     comments = ListField(EmbeddedDocumentField('Comment'))
+    is_published = BooleanField(default=False)
     tags = ListField(ReferenceField(Tag, reverse_delete_rule=PULL))
 
     meta = {

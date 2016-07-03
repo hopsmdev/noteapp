@@ -259,3 +259,12 @@ class NoteModelTest(TestCase):
 
         tag = Tag.objects(tag=new_tag).first()
         self.assertEqual(tag.tag, new_tag)
+
+    def test_edit_comment(self):
+        pass
+
+    def test_edit_note(self):
+        pass
+
+    def test_edit_note_title(self):
+        pass
