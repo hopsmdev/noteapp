@@ -1,4 +1,4 @@
-from mongoengine.connection import connect, disconnect, get_connection, get_db
+from mongoengine.connection import connect, disconnect, get_connection
 from django.test import TestCase
 from notes.models import *
 from noteapp.settings import test

@@ -4,6 +4,9 @@ from bson.objectid import ObjectId
 from mongoengine import Document, EmbeddedDocument, PULL
 from mongoengine.fields import *
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class Comment(EmbeddedDocument):
     _id = ObjectIdField(
@@ -69,7 +72,8 @@ class Note(Document):
 
         tag = Tag.objects(tag=tag_name).first()
         if not tag:
-            print("Tag {} does not exist, cannot remove".format(tag_name))
+            logger.warning(
+                "Tag {} does not exist, cannot remove".format(tag_name))
             return
 
         Note.objects(id=self.id).update_one(
@@ -90,7 +94,8 @@ class Note(Document):
 
         tag = Tag.objects(tag=tag_name).first()
         if not tag:
-            print("Tag {} does not exist, create new one".format(tag_name))
+            logger.warning(
+                "Tag {} does not exist, create new one".format(tag_name))
             tag = Tag(tag=tag_name)
             tag.save()
 
