@@ -17,7 +17,10 @@ class NoteDetail(mongo_generics.RetrieveUpdateDestroyAPIView):
     queryset = Note.objects()
     serializer_class = NoteSerializer
     permission_classes = [permissions.AllowAny]
-    lookup_field = 'id'
+
+
+class NoteDetailSlug(NoteDetail):
+    lookup_field = 'slug'
 
 
 class TagList(mongo_generics.ListCreateAPIView):

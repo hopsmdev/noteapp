@@ -27,8 +27,8 @@ class Comment(EmbeddedDocument):
 
 class Tag(Document):
 
-    tag = StringField(max_length=128, required=True,
-                      primary_key=True, unique=True)
+    tag = StringField(
+        max_length=128, required=True, primary_key=True, unique=True)
 
     def __str__(self):
         return str(self.tag)
@@ -37,9 +37,9 @@ class Tag(Document):
 class Note(Document):
     pub_date = DateTimeField(default=datetime.datetime.now, required=True)
     title = StringField(max_length=255, required=True)
-    slug = StringField(max_length=255, required=True)
     text = StringField(verbose_name="Text", required=True)
     comments = ListField(EmbeddedDocumentField('Comment'))
+    slug = StringField(max_length=60)
     is_published = BooleanField(default=False)
     tags = ListField(ReferenceField(Tag, reverse_delete_rule=PULL))
 
@@ -51,7 +51,7 @@ class Note(Document):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)[:50]
+            self.slug = slugify(self.title)[:60]
         return super(Note, self).save(*args, **kwargs)
 
     def formatted_title(self):
@@ -72,7 +72,7 @@ class Note(Document):
 
         tag = Tag.objects(tag=tag_name).first()
         if not tag:
-            logger.warning(
+            logger.debug(
                 "Tag {} does not exist, cannot remove".format(tag_name))
             return
 
@@ -94,7 +94,7 @@ class Note(Document):
 
         tag = Tag.objects(tag=tag_name).first()
         if not tag:
-            logger.warning(
+            logger.debug(
                 "Tag {} does not exist, create new one".format(tag_name))
             tag = Tag(tag=tag_name)
             tag.save()
