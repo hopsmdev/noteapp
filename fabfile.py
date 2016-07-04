@@ -10,8 +10,16 @@ def test(app):
     local("./manage.py test {} --settings=noteapp.settings.test".format(app))
 
 
-def test_notes():
-    test(app="notes")
+def test_model(app):
+    setup_test_env()
+    local("./manage.py test {} "
+          "-p tests_model.py --settings=noteapp.settings.test".format(app))
+
+
+def test_api(app):
+    setup_test_env()
+    local("./manage.py test {} "
+          "-p tests_api.py --settings=noteapp.settings.test".format(app))
 
 
 def freeze(requirements="requirements.txt"):
