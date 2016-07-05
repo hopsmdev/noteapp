@@ -16,10 +16,16 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from notes.api.views import NoteList, TagList
+from notes import views
+from notes.api.views import NoteList, NoteDetail, NoteDetailSlug
+from notes.api.views import TagList
 
 note_urls = [
-    url(r'^$', NoteList.as_view(), name='user-list')
+    url(r'^$', NoteList.as_view(), name='user-list'),
+    url(r'^(?P<id>[0-9a-zA-Z]+)/$',
+        NoteDetail.as_view(), name='note-detail'),
+    url(r'^(?P<slug>[0-9a-zA-Z]+)/$',
+        NoteDetailSlug.as_view(), name='note-detail-slug'),
 ]
 
 tag_urls = [
@@ -27,8 +33,9 @@ tag_urls = [
 ]
 
 urlpatterns = [
+    url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
-    url(r'^notes', include(note_urls)),
-    url(r'^tags', include(tag_urls)),
+    url(r'^api/v1/notes/', include(note_urls)),
+    url(r'^api/v1/tags/', include(tag_urls)),
 ]
 
