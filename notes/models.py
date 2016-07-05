@@ -33,6 +33,12 @@ class Tag(Document):
     def __str__(self):
         return str(self.tag)
 
+    def __eq__(self, other):
+        return isinstance(other, Tag) and self.tag == other.tag
+
+    def __hash__(self):
+        return hash(self.tag)
+
 
 class Note(Document):
     pub_date = DateTimeField(default=datetime.datetime.now, required=True)
@@ -49,10 +55,74 @@ class Note(Document):
         'ordering': ['-pub_date']
     }
 
+    @staticmethod
+    def __is_iterable(arg):
+        if not isinstance(arg, list):
+           raise TypeError()
+
+    @staticmethod
+    def __add_tags(tags):
+
+        if not tags:
+            return []
+
+        if not isinstance(tags, list):
+            raise TypeError()
+
+        for tag_obj in tags:
+            _tag = Tag.objects(tag=tag_obj.tag).first()
+            if not _tag:
+                Tag(tag=tag_obj.tag).save()
+        return tags
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)[:60]
+
+        kwargs['tags'] = self.__add_tags(tags=kwargs.get('tags'))
+
         return super(Note, self).save(*args, **kwargs)
+
+    def update(self, **kwargs):
+
+        update_dict = {}
+
+        for kwarg in kwargs:
+            if kwarg == 'tags':
+
+                tags = kwargs.get('tags')
+                if not set(tags).issubset(set(self.tags)):
+                    update_dict['push_all__tags'] = self.__add_tags(tags)
+
+            elif kwarg == 'comments':
+                update_dict['push_all__comments'] = kwargs.get('comments')
+
+            else:
+                if kwarg in Note._fields.keys():
+                    update_dict['set__{}'.format(kwarg)] = kwargs.get(kwarg)
+
+        if update_dict:
+            super(Note, self).update(**update_dict)
+            super(Note, self).reload()
+
+    def remove(self, **kwargs):
+
+        remove_dict = {}
+
+        for kwarg in kwargs:
+            if kwarg == 'tags':
+               remove_dict['pull_all__tags'] = kwargs.get('tags')
+
+            elif kwarg == 'comments':
+                remove_dict['pull_all__comments'] = kwargs.get('comments')
+
+            else:
+                if kwarg in Note._fields.keys():
+                    remove_dict['unset__{}'.format(kwarg)] = kwargs.get(kwarg)
+
+        if remove_dict:
+            super(Note, self).update(**remove_dict)
+            super(Note, self).reload()
 
     def formatted_title(self):
         return self.title.title()
@@ -67,38 +137,3 @@ class Note(Document):
     def __str__(self):
         return "{} on {}".format(
             self.title, self.pub_date.strftime('%Y-%m-%d'))
-
-    def delete_tag(self, tag_name=None):
-
-        tag = Tag.objects(tag=tag_name).first()
-        if not tag:
-            logger.debug(
-                "Tag {} does not exist, cannot remove".format(tag_name))
-            return
-
-        Note.objects(id=self.id).update_one(
-            pull__tags=Tag.objects(tag=tag_name).first())
-        self.save()
-
-    def delete_comment(self, comment_id=None):
-        Note.objects(id=self.id).update_one(
-            pull__comments={'_id': comment_id})
-        self.save()
-
-    def add_comment(self, comment):
-        if comment:
-            Note.objects(id=self.id).update_one(push__comments=comment)
-            self.save()
-
-    def add_tag(self, tag_name=None):
-
-        tag = Tag.objects(tag=tag_name).first()
-        if not tag:
-            logger.debug(
-                "Tag {} does not exist, create new one".format(tag_name))
-            tag = Tag(tag=tag_name)
-            tag.save()
-
-        tag = Tag.objects(tag=tag_name).first()
-        Note.objects(id=self.id).update_one(push__tags=tag)
-        self.save()
