@@ -111,7 +111,7 @@ class Note(Document):
 
         for kwarg in kwargs:
             if kwarg == 'tags':
-               remove_dict['pull_all__tags'] = kwargs.get('tags')
+                remove_dict['pull_all__tags'] = kwargs.get('tags')
 
             elif kwarg == 'comments':
                 remove_dict['pull_all__comments'] = kwargs.get('comments')
