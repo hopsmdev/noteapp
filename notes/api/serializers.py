@@ -1,5 +1,4 @@
 import logging
-from rest_framework_mongoengine import fields
 from rest_framework_mongoengine.serializers import (
     DocumentSerializer, EmbeddedDocumentSerializer, drf_fields)
 from notes.models import *
@@ -28,20 +27,27 @@ class NoteSerializer(DocumentSerializer):
 
     def create(self, validated_data):
 
-        comments = validated_data.pop('comments')
         tags = validated_data.pop('tags')
 
         new_note = Note(**validated_data)
 
         new_note.tags.extend([(Tag(**tag_data)) for tag_data in tags])
-        new_note.comments.extend([(Comment(**comment_data))
-                                  for comment_data in comments])
 
         new_note.save()
         return new_note
 
+    def update(self, instance, validated_data):
 
+        tags = validated_data.pop('tags')
+        comments = validated_data.pop('comments')
 
+        updated_instance = super(NoteSerializer, self).update(
+            instance, validated_data)
+
+        tags = [(Tag(**tag_data)) for tag_data in tags]
+
+        updated_instance.update(tags=tags, comments=comments)
+        return updated_instance
 
 
 

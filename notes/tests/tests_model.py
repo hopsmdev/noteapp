@@ -126,6 +126,7 @@ class NoteModelTest(TestCaseMongo, TestDataFactory):
     def test_add_the_same_tag_multiple_times_to_note(self):
 
         self.short_note.update(tags=[self.tag_c])
+        self.short_note.reload()
         self.short_note.update(tags=[self.tag_c])
         self.short_note.reload()
         note_tags = [tag.tag for tag in self.short_note.tags]

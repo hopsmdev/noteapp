@@ -4,11 +4,14 @@ from notes.tests.utils import TestCaseMongo, TestDataFactory
 from notes.api.views import *
 
 
-class NoteGETApiTest(TestCaseMongo, TestDataFactory):
+class ApiTest(TestCaseMongo, TestDataFactory):
 
     def setUp(self):
         self.data_setup()
         self.factory = RequestFactory()
+
+
+class NoteGETApiTest(ApiTest):
 
     def test_get_notes(self):
 
@@ -21,8 +24,7 @@ class NoteGETApiTest(TestCaseMongo, TestDataFactory):
         _id = str(self.short_note.id)
         request = self.factory.get('/api/v1/notes/{}'.format(_id))
 
-        view = NoteDetail.as_view()
-        response = view(request, id=_id)
+        response = NoteDetail.as_view()(request, id=_id)
         self.assertEqual(response.status_code, 200)
 
     def test_get_note_detail_slug(self):
@@ -30,16 +32,11 @@ class NoteGETApiTest(TestCaseMongo, TestDataFactory):
         slug = self.short_note.slug
         request = self.factory.get('/api/v1/notes/{}'.format(str(slug)))
 
-        view = NoteDetailSlug.as_view()
-        response = view(request, slug=slug)
+        response = NoteDetailSlug.as_view()(request, slug=slug)
         self.assertEqual(response.status_code, 200)
 
 
-class NotePOSTApiTest(TestCaseMongo, TestDataFactory):
-
-    def setUp(self):
-        self.data_setup()
-        self.factory = RequestFactory()
+class NotePOSTApiTest(ApiTest):
 
     def test_post_note(self):
 
@@ -47,23 +44,74 @@ class NotePOSTApiTest(TestCaseMongo, TestDataFactory):
             'title': 'Test POST',
             'text': 'post text',
             'tags': [{'tag': 'a'}, {'tag': 'b'}],
-            'comments': []
+            'comments': [
+                {
+                    "author": "Author1",
+                    "email": "author1@test.com",
+                    "text": "First comment of Author1"
+                },
+                {
+                    "author": "Author1",
+                    "email": "author1@test.com",
+                    "text": "Second comment of Author1"
+                }]
         }
 
-        print(json.dumps(data))
         request = self.factory.post(
             '/api/v1/notes/', json.dumps(data), content_type="application/json")
         response = NoteList.as_view()(request)
-        print(response.data)
+
+        self.assertTrue(response.data['comments'])
+        self.assertTrue(response.data['tags'])
         self.assertEqual(response.status_code, 201)
 
+        note_id = response.data['id']
 
-class TagGETApiTest(TestCaseMongo, TestDataFactory):
+        request = self.factory.get('/api/v1/notes/{}'.format(note_id))
+        response = NoteDetail.as_view()(request, id=note_id)
+        self.assertEqual(response.status_code, 200)
 
-    def setUp(self):
-        self.data_setup()
-        self.factory = RequestFactory()
 
+class NotePUTApiTest(ApiTest):
+
+    def test_put_note(self):
+
+        data = {
+            'title': 'Test POST',
+            'text': 'post text',
+            'tags': [{'tag': 'e'}, {'tag': 'f'}],
+            'comments': [
+                {
+                    "author": "Author3",
+                    "email": "author3@test.com",
+                    "text": "First comment of Author3"
+                },
+                {
+                    "author": "Author3",
+                    "email": "author3@test.com",
+                    "text": "Second comment of Author3"
+                }]
+        }
+
+        note_id = self.short_note.id
+        url = '/api/v1/notes/{}'.format(str(note_id))
+
+        request = self.factory.put(
+            url, json.dumps(data), content_type="application/json")
+        response = NoteDetail.as_view()(request, id=note_id)
+
+        self.assertTrue(response.data['comments'])
+        self.assertTrue(response.data['tags'])
+        self.assertEqual(response.status_code, 200)
+
+        request = self.factory.get('/api/v1/notes/{}'.format(note_id))
+        response = NoteDetail.as_view()(request, id=note_id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['tags']), 4)
+        self.assertEqual(len(response.data['comments']), 5)
+
+
+class TagGETApiTest(ApiTest):
 
     def test_get_tags(self):
 
@@ -72,6 +120,22 @@ class TagGETApiTest(TestCaseMongo, TestDataFactory):
         self.assertEqual(response.status_code, 200)
 
 
+class TagPOSTApiTest(ApiTest):
+
+    def test_post_tag(self):
+
+        data = {
+            'tag': 'XXX'
+        }
+
+        request = self.factory.post(
+            '/api/v1/tags/', json.dumps(data), content_type="application/json")
+        response = TagList.as_view()(request)
+        self.assertEqual(response.status_code, 201)
+
+        request = self.factory.get('/api/v1/tags/')
+        response = TagList.as_view()(request)
+        self.assertEqual(len(response.data), 4)
 
 
 

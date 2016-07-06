@@ -72,10 +72,11 @@ class Note(Document):
         for tag_obj in tags:
             _tag = Tag.objects(tag=tag_obj.tag).first()
             if not _tag:
-                Tag(tag=tag_obj.tag).save()
+                Tag(tag=tag_obj.tag).save().reload()
         return tags
 
     def save(self, *args, **kwargs):
+
         if not self.slug:
             self.slug = slugify(self.title)[:60]
 
@@ -102,8 +103,7 @@ class Note(Document):
                     update_dict['set__{}'.format(kwarg)] = kwargs.get(kwarg)
 
         if update_dict:
-            super(Note, self).update(**update_dict)
-            super(Note, self).reload()
+            return super(Note, self).update(**update_dict)
 
     def remove(self, **kwargs):
 
