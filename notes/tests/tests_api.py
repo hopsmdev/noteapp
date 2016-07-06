@@ -27,6 +27,13 @@ class NoteGETApiTest(ApiTest):
         response = NoteDetail.as_view()(request, id=_id)
         self.assertEqual(response.status_code, 200)
 
+    def test_get_note_detail_notexistid(self):
+
+        request = self.factory.get('/api/v1/notes/123')
+
+        response = NoteDetail.as_view()(request, id='123')
+        self.assertEqual(response.status_code, 404)
+
     def test_get_note_detail_slug(self):
 
         slug = self.short_note.slug
@@ -138,5 +145,19 @@ class TagPOSTApiTest(ApiTest):
         self.assertEqual(len(response.data), 4)
 
 
+class TagDELETEApiTest(ApiTest):
 
+    def test_delete_tag(self):
+        request = self.factory.delete('/api/v1/tags/a')
+        response = TagDetail.as_view()(request, tag='a')
+        self.assertEqual(response.status_code, 204)
 
+        request = self.factory.get('/api/v1/tags/')
+        response = TagList.as_view()(request)
+        self.assertEqual(len(response.data), 2)
+
+        # confirm that tag from note was also removed
+        _id = str(self.short_note.id)
+        request = self.factory.get('/api/v1/notes/{}'.format(_id))
+        response = NoteDetail.as_view()(request, id=_id)
+        self.assertEqual(len(response.data['tags']), 1)

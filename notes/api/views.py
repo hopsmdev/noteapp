@@ -31,6 +31,14 @@ class TagList(mongo_generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
 
 
+class TagDetail(mongo_generics.RetrieveUpdateDestroyAPIView):
+    model = Tag
+    queryset = Tag.objects()
+    serializer_class = TagSerializer
+    permission_classes = [permissions.AllowAny]
+    lookup_field = 'tag'
+
+
 
 
 

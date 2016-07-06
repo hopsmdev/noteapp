@@ -23,7 +23,6 @@ class NoteSerializer(DocumentSerializer):
 
     class Meta:
         model = Note
-        allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
 
     def create(self, validated_data):
 
