@@ -29,7 +29,9 @@ note_urls = [
 ]
 
 tag_urls = [
-    url(r'^$', TagList.as_view(), name='tag-list')
+    url(r'^$', TagList.as_view(), name='tag-list'),
+    url(r'^(?P<tag>[0-9a-zA-Z]+)/$',
+        TagDetail.as_view(), name='tag-detail')
 ]
 
 urlpatterns = [
