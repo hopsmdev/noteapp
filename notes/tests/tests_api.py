@@ -30,7 +30,6 @@ class NoteGETApiTest(ApiTest):
     def test_get_note_detail_notexistid(self):
 
         request = self.factory.get('/api/v1/notes/123')
-
         response = NoteDetail.as_view()(request, id='123')
         self.assertEqual(response.status_code, 404)
 
@@ -118,6 +117,32 @@ class NotePUTApiTest(ApiTest):
         self.assertEqual(len(response.data['comments']), 5)
 
 
+class NoteDELETEApiTest(ApiTest):
+
+    def test_delete_note(self):
+
+        note_id = self.short_note.id
+        url = '/api/v1/notes/{}'.format(str(note_id))
+
+        # Confirm that note exists
+        request = self.factory.get(url)
+        response = NoteDetail.as_view()(request, id=note_id)
+        self.assertEqual(response.status_code, 200)
+
+        # Removing note
+        request = self.factory.delete(url)
+        response = NoteDetail.as_view()(request, id=note_id)
+
+        # Confirm that note was removed
+        request = self.factory.get(url)
+        response = NoteDetail.as_view()(request, id=note_id)
+        self.assertEqual(response.status_code, 404)
+
+
+################################################################################
+#                                  TAGS
+################################################################################
+
 class TagGETApiTest(ApiTest):
 
     def test_get_tags(self):
@@ -156,7 +181,7 @@ class TagDELETEApiTest(ApiTest):
         response = TagList.as_view()(request)
         self.assertEqual(len(response.data), 2)
 
-        # confirm that tag from note was also removed
+        # Confirm that tag from note was also removed
         _id = str(self.short_note.id)
         request = self.factory.get('/api/v1/notes/{}'.format(_id))
         response = NoteDetail.as_view()(request, id=_id)
