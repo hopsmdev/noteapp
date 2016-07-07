@@ -1,5 +1,4 @@
-import json
-from rest_framework import permissions, generics
+from rest_framework import permissions, filters, authentication
 from rest_framework_mongoengine import generics as mongo_generics
 
 from .serializers import NoteSerializer, TagSerializer

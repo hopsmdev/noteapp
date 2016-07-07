@@ -13,10 +13,19 @@ class CommentSerializer(EmbeddedDocumentSerializer):
 
 class TagSerializer(DocumentSerializer):
 
+    links = SerializerMethodField()
+
     tag = drf_fields.CharField(max_length=128)
 
     class Meta:
         model = Tag
+
+    def get_links(self, obj):
+        request = self.context['request']
+        return {
+            "self": reverse(
+                'tag-detail', kwargs={'tag': obj.tag}, request=request)
+        }
 
 
 class NoteSerializer(DocumentSerializer):
