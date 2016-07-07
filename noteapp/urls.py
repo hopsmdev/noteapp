@@ -34,9 +34,11 @@ tag_urls = [
         TagDetail.as_view(), name='tag-detail')
 ]
 
+
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
+    url(r'^api-docs/', include('rest_framework_swagger.urls')),
     url(r'^api/v1/notes/', include(note_urls)),
     url(r'^api/v1/tags/', include(tag_urls)),
 ]

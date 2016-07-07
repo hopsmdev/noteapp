@@ -1,7 +1,9 @@
 import logging
+from rest_framework.serializers import SerializerMethodField
 from rest_framework_mongoengine.serializers import (
     DocumentSerializer, EmbeddedDocumentSerializer, drf_fields)
 from notes.models import *
+from rest_framework.reverse import reverse
 
 
 class CommentSerializer(EmbeddedDocumentSerializer):
@@ -18,6 +20,9 @@ class TagSerializer(DocumentSerializer):
 
 
 class NoteSerializer(DocumentSerializer):
+
+    links = SerializerMethodField()
+
     comments = CommentSerializer(many=True)
     tags = TagSerializer(many=True)
 
@@ -46,3 +51,10 @@ class NoteSerializer(DocumentSerializer):
         updated_instance.update(tags=tags, comments=comments)
 
         return updated_instance
+
+    def get_links(self, obj):
+        request = self.context['request']
+        return {
+            "self": reverse(
+                'note-detail', kwargs={'id': obj.id}, request=request)
+        }

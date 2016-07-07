@@ -122,7 +122,6 @@ class Note(Document):
         if remove_dict:
             return super(Note, self).update(**remove_dict)
 
-
     def formatted_title(self):
         return self.title.title()
 
