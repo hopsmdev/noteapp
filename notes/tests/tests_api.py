@@ -132,11 +132,17 @@ class NoteDELETEApiTest(ApiTest):
         # Removing note
         request = self.factory.delete(url)
         response = NoteDetail.as_view()(request, id=note_id)
+        self.assertEqual(response.status_code, 204)
 
         # Confirm that note was removed
         request = self.factory.get(url)
         response = NoteDetail.as_view()(request, id=note_id)
         self.assertEqual(response.status_code, 404)
+
+    def test_delete_tag_from_note(self):
+
+       pass
+
 
 
 ################################################################################

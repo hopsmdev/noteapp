@@ -1,3 +1,4 @@
+import json
 from rest_framework import permissions, generics
 from rest_framework_mongoengine import generics as mongo_generics
 
@@ -37,8 +38,3 @@ class TagDetail(mongo_generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TagSerializer
     permission_classes = [permissions.AllowAny]
     lookup_field = 'tag'
-
-
-
-
-

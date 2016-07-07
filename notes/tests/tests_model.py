@@ -78,11 +78,13 @@ class NoteModelTest(TestCaseMongo, TestDataFactory):
     def test_delete_note_comment(self):
 
         self.short_note.remove(comments=[self.comment_auth1_1])
+        self.short_note.reload()
         self.assertEqual(len(self.short_note.comments), 2)
 
     def test_delete_tag_from_note(self):
 
         self.short_note.remove(tags=[self.tag_a])
+        self.short_note.reload()
         self.assertEqual(len(self.short_note.tags), 1)
 
     def test_delete_tag(self):

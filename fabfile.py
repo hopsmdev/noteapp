@@ -7,7 +7,8 @@ def setup_test_env():
 
 def test(app):
     setup_test_env()
-    local("./manage.py test {} --settings=noteapp.settings.test".format(app))
+    local("./manage.py test {} -p tests_*.py "
+          "--settings=noteapp.settings.test".format(app))
 
 
 def test_model(app):

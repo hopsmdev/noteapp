@@ -29,10 +29,9 @@ class NoteSerializer(DocumentSerializer):
         tags = validated_data.pop('tags')
 
         new_note = Note(**validated_data)
-
         new_note.tags.extend([(Tag(**tag_data)) for tag_data in tags])
-
         new_note.save()
+
         return new_note
 
     def update(self, instance, validated_data):
@@ -42,11 +41,8 @@ class NoteSerializer(DocumentSerializer):
 
         updated_instance = super(NoteSerializer, self).update(
             instance, validated_data)
-
         tags = [(Tag(**tag_data)) for tag_data in tags]
 
         updated_instance.update(tags=tags, comments=comments)
+
         return updated_instance
-
-
-

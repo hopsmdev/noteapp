@@ -18,7 +18,7 @@ from django.contrib import admin
 
 from notes import views
 from notes.api.views import NoteList, NoteDetail, NoteDetailSlug
-from notes.api.views import TagList
+from notes.api.views import TagList, TagDetail
 
 note_urls = [
     url(r'^$', NoteList.as_view(), name='user-list'),

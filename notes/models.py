@@ -88,19 +88,17 @@ class Note(Document):
 
         update_dict = {}
 
+        tags = kwargs.pop('tags', None)
+        if tags and not set(tags).issubset(set(self.tags)):
+            update_dict['push_all__tags'] = self.__add_tags(tags)
+
+        comments = kwargs.pop('comments', None)
+        if comments:
+            update_dict['push_all__comments'] = comments
+
         for kwarg in kwargs:
-            if kwarg == 'tags':
-
-                tags = kwargs.get('tags')
-                if not set(tags).issubset(set(self.tags)):
-                    update_dict['push_all__tags'] = self.__add_tags(tags)
-
-            elif kwarg == 'comments':
-                update_dict['push_all__comments'] = kwargs.get('comments')
-
-            else:
-                if kwarg in Note._fields.keys():
-                    update_dict['set__{}'.format(kwarg)] = kwargs.get(kwarg)
+            if kwarg in Note._fields.keys():
+                update_dict['set__{}'.format(kwarg)] = kwargs.get(kwarg)
 
         if update_dict:
             return super(Note, self).update(**update_dict)
@@ -109,20 +107,21 @@ class Note(Document):
 
         remove_dict = {}
 
+        tags = kwargs.pop('tags', None)
+        if tags:
+            remove_dict['pull_all__tags'] = tags
+
+        comments = kwargs.pop('comments', None)
+        if comments:
+            remove_dict['pull_all__comments'] = comments
+
         for kwarg in kwargs:
-            if kwarg == 'tags':
-                remove_dict['pull_all__tags'] = kwargs.get('tags')
-
-            elif kwarg == 'comments':
-                remove_dict['pull_all__comments'] = kwargs.get('comments')
-
-            else:
-                if kwarg in Note._fields.keys():
-                    remove_dict['unset__{}'.format(kwarg)] = kwargs.get(kwarg)
+            if kwarg in Note._fields.keys():
+                remove_dict['unset__{}'.format(kwarg)] = kwargs.get(kwarg)
 
         if remove_dict:
-            super(Note, self).update(**remove_dict)
-            super(Note, self).reload()
+            return super(Note, self).update(**remove_dict)
+
 
     def formatted_title(self):
         return self.title.title()
