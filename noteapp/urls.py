@@ -1,24 +1,12 @@
-"""noteapp URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.9/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
 from django.conf.urls import url, include
-from django.contrib import admin
 
 from notes import views
 from notes.api.views import NoteList, NoteDetail, NoteDetailSlug
 from notes.api.views import TagList, TagDetail
+
+from authentication.api.views import (
+    CreateAccountView, AccountList, AccountDetail)
+
 
 note_urls = [
     url(r'^$', NoteList.as_view(), name='user-list'),
@@ -34,12 +22,20 @@ tag_urls = [
         TagDetail.as_view(), name='tag-detail')
 ]
 
+account_urls = [
+    url(r'^$', AccountList.as_view(), name='account-list'),
+    url(r'^(?P<username>[0-9a-zA-Z]+)/$',
+        AccountDetail.as_view(), name='account-detail'),
+    url(r'^register', CreateAccountView.as_view(), name='account-create')
+]
+
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^admin/', admin.site.urls),
     url(r'^api-docs/', include('rest_framework_swagger.urls')),
     url(r'^api/v1/notes/', include(note_urls)),
     url(r'^api/v1/tags/', include(tag_urls)),
+    url(r'^api/v1/account/', include(account_urls)),
+
 ]
 
