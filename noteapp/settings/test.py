@@ -24,5 +24,5 @@ mongoengine.register_connection(
 
 
 AUTHENTICATION_BACKENDS = (
-    'mongoengine.django.auth.MongoEngineBackend',
+    'mongoengine.django.authentication.MongoEngineBackend',
 )

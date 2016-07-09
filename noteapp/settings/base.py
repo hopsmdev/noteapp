@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mongoengine.django.mongo_auth',
     'rest_framework',
     'rest_framework_mongoengine',
     'rest_framework_swagger',
-    'notes'
+    'authentication',
+    'notes',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -89,3 +91,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
+AUTH_USER_MODEL = 'mongo_auth.MongoUser'
+AUTHENTICATION_BACKENDS = (
+    'mongoengine.django.auth.MongoEngineBackend',
+    ...
+)
+SESSION_ENGINE = 'mongoengine.django.sessions'

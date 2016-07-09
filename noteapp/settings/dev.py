@@ -7,9 +7,6 @@ DATABASES = {
     'default': {'ENGINE': 'django.db.backends.dummy'}
 }
 
-
-SESSION_ENGINE = 'mongoengine.django.sessions'
-
 MONGODB_USER = os.environ.get("MONGODB_USER")
 MONGODB_PASSWORD = os.environ.get("MONGODB_PASSWORD")
 MONGODB_HOST = os.environ.get("MONGODB_HOST")
@@ -31,8 +28,3 @@ MONGO_DATABASE_OPTIONS = {
 #mongoengine.connect(MONGODB_NAME, host=MONGODB_DATABASE)
 mongoengine.register_connection(
     'default', MONGODB_NAME, **MONGO_DATABASE_OPTIONS)
-
-
-AUTHENTICATION_BACKENDS = (
-    'mongoengine.django.auth.MongoEngineBackend',
-)
