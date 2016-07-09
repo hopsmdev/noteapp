@@ -1,0 +1,1 @@
+from mongoengine.django.auth import User
