@@ -1,3 +1,5 @@
+import debug_toolbar
+
 from django.conf.urls import url, include
 
 from notes import views
@@ -5,7 +7,7 @@ from notes.api.views import NoteList, NoteDetail, NoteDetailSlug
 from notes.api.views import TagList, TagDetail
 
 from authentication.api.views import (
-    CreateAccountView, AccountList, AccountDetail)
+    RegisterAccountView, AccountList, AccountDetail, LoginView)
 
 
 note_urls = [
@@ -26,7 +28,7 @@ account_urls = [
     url(r'^$', AccountList.as_view(), name='account-list'),
     url(r'^(?P<username>[0-9a-zA-Z]+)/$',
         AccountDetail.as_view(), name='account-detail'),
-    url(r'^register', CreateAccountView.as_view(), name='account-create')
+    url(r'^register/$', RegisterAccountView.as_view(), name='account-register'),
 ]
 
 
@@ -36,6 +38,7 @@ urlpatterns = [
     url(r'^api/v1/notes/', include(note_urls)),
     url(r'^api/v1/tags/', include(tag_urls)),
     url(r'^api/v1/account/', include(account_urls)),
+    url(r'^api/v1/login/', LoginView.as_view(), name='login'),
+    url(r'^debug/', include(debug_toolbar.urls)),
 
 ]
-

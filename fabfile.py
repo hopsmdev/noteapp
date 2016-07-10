@@ -32,4 +32,5 @@ def run_server(settings="dev"):
     local("python load_data.py")
 
     settings_type = "noteapp.settings.{}".format(settings)
-    local("./manage.py runserver --settings={}".format(settings_type))
+    local("./manage.py runserver --settings={} --verbosity 3".format(
+        settings_type))
