@@ -1,0 +1,19 @@
+{
+  "name": "noteapp",
+  "version": "1.0.0",
+  "description": "Notes app",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hopsmdev/noteapp"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hopsmdev/noteapp/issues"
+  },
+  "homepage": "https://github.com/hopsmdev/noteapp",
+  "dependencies": {
+    "bower": "^1.3.12"
+  }
+}
