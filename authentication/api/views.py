@@ -3,7 +3,7 @@ logger = logging.getLogger(__name__)
 
 from django.utils.encoding import smart_text
 from django.contrib.auth import login
-from mongoengine.django.auth import MongoEngineBackend, get_user, User
+from mongoengine.django.auth import get_user, User
 
 from rest_framework import permissions, status
 from rest_framework.response import Response
