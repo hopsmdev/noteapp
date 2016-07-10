@@ -7,7 +7,7 @@ from notes.api.views import NoteList, NoteDetail, NoteDetailSlug
 from notes.api.views import TagList, TagDetail
 
 from authentication.api.views import (
-    RegisterAccountView, AccountList, AccountDetail, LoginView)
+    RegisterAccountView, AccountList, AccountDetail, LoginView, LogoutView)
 
 
 note_urls = [
@@ -39,6 +39,8 @@ urlpatterns = [
     url(r'^api/v1/tags/', include(tag_urls)),
     url(r'^api/v1/account/', include(account_urls)),
     url(r'^api/v1/login/', LoginView.as_view(), name='login'),
+    url(r'^api/v1/logout/', LogoutView.as_view(), name='logout'),
+
     url(r'^debug/', include(debug_toolbar.urls)),
 
 ]

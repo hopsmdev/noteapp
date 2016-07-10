@@ -2,7 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.utils.encoding import smart_text
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from mongoengine.django.auth import get_user, User
 
 from rest_framework import permissions, status
@@ -67,7 +67,18 @@ class LoginView(mongo_generics.GenericAPIView):
             }, status=status.HTTP_401_UNAUTHORIZED)
 
 
+class LogoutView(mongo_generics.GenericAPIView):
+
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+
+        logout(request)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
 class AccountList(mongo_generics.ListCreateAPIView):
+
     model = Account
     queryset = Account.objects()
     serializer_class = AccountSerializer
@@ -75,6 +86,7 @@ class AccountList(mongo_generics.ListCreateAPIView):
 
 
 class AccountDetail(mongo_generics.RetrieveUpdateDestroyAPIView):
+
     model = Account
     queryset = Account.objects()
     serializer_class = AccountSerializer
