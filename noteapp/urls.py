@@ -1,8 +1,6 @@
-import debug_toolbar
-
 from django.conf.urls import url, include
 
-from notes import views
+from noteapp.views import IndexView
 from notes.api.views import NoteList, NoteDetail, NoteDetailSlug
 from notes.api.views import TagList, TagDetail
 
@@ -33,14 +31,12 @@ account_urls = [
 
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    url(r'^.*$', IndexView.as_view(), name='index'),
+
     url(r'^api-docs/', include('rest_framework_swagger.urls')),
     url(r'^api/v1/notes/', include(note_urls)),
     url(r'^api/v1/tags/', include(tag_urls)),
     url(r'^api/v1/account/', include(account_urls)),
-    url(r'^api/v1/login/', LoginView.as_view(), name='login'),
-    url(r'^api/v1/logout/', LogoutView.as_view(), name='logout'),
-
-    url(r'^debug/', include(debug_toolbar.urls)),
-
+    url(r'^api/v1/auth/login/', LoginView.as_view(), name='login'),
+    url(r'^api/v1/auth/logout/', LogoutView.as_view(), name='logout'),
 ]
