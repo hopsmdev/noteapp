@@ -3,21 +3,21 @@
 
   angular
     .module('noteapp', [
-      'noteapp.routes',
-      'noteapp.authentication'
+        'noteapp.config',
+        'noteapp.routes',
+        'noteapp.authentication',
+        'noteapp.layout'
     ]);
 
-  angular.module('noteapp.routes', ['ngRoute']);
+    angular.module('noteapp.config', []);
+    angular.module('noteapp.routes', ['ngRoute']);
+    angular.module('noteapp').run(run);
 
-  angular.module('noteapp.config', []);
+    run.$inject = ['$http'];
 
-   angular.module('noteapp').run(run);
-
-  run.$inject = ['$http'];
-
-  function run($http) {
-    $http.defaults.xsrfHeaderName = 'X-CSRFToken';
-    $http.defaults.xsrfCookieName = 'csrftoken';
-  }
+    function run($http) {
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.defaults.xsrfCookieName = 'csrftoken';
+    }
 
 })();

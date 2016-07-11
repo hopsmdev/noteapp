@@ -1,3 +1,4 @@
+import os
 from fabric.api import local
 
 
@@ -27,9 +28,21 @@ def freeze(requirements="requirements.txt"):
     local("pip freeze > {}".format(requirements))
 
 
+def js():
+
+    bower_bin = "node_modules/bower/bin/bower"
+
+    if os.path.exists('static/bower_components'):
+        if os.listdir('node_modules/'):
+            if not os.path.exists(bower_bin):
+                local('npm install bower')
+            local('{} install'.format(bower_bin))
+
 def run_server(settings="dev"):
 
     local("python load_data.py")
+
+    js()
 
     settings_type = "noteapp.settings.{}".format(settings)
     local("./manage.py runserver --settings={} --verbosity 3".format(

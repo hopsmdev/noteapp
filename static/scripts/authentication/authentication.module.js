@@ -7,9 +7,7 @@
       'noteapp.authentication.services'
     ]);
 
-  angular
-    .module('noteapp.authentication.controllers', []);
+  angular.module('noteapp.authentication.controllers', []);
 
-  angular
-    .module('noteapp.authentication.services', ['ngCookies']);
+  angular.module('noteapp.authentication.services', ['ngCookies']);
 })();
