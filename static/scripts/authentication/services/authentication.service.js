@@ -43,9 +43,9 @@
 
     function register(email, password, username) {
         return $http.post('/api/v1/account/register/', {
-            username: username,
-            password: password,
-            email: email
+            'username': username,
+            'password': password,
+            'email': email
     }).then(registerSuccessFn, registerErrorFn);
 
         function registerSuccessFn(data, status, headers, config) {
@@ -53,7 +53,7 @@
         }
 
         function registerErrorFn(data, status, headers, config) {
-            console.error('Cannot register');
+            console.error('Cannot register', data, status, headers);
         }
     }
 
