@@ -13,7 +13,7 @@
 
         register: register,
         login: login,
-
+        logout: logout,
         getAuthenticatedAccount: getAuthenticatedAccount,
         isAuthenticated: isAuthenticated,
         setAuthenticatedAccount: setAuthenticatedAccount,
@@ -92,5 +92,24 @@
             console.error('Cannot login!', data, headers);
         }
     }
+
+    function logout() {
+      return $http.post('/api/v1/auth/logout/')
+        .then(logoutSuccessFn, logoutErrorFn);
+
+
+      function logoutSuccessFn(data, status, headers, config) {
+        Authentication.unauthenticate();
+
+        window.location = '/';
+      }
+
+      function logoutErrorFn(data, status, headers, config) {
+        console.error('Epic failure!');
+      }
+    }
+
+
+
   }
 })();
