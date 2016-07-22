@@ -26,17 +26,20 @@ account_urls = [
     url(r'^$', AccountList.as_view(), name='account-list'),
     url(r'^(?P<username>[0-9a-zA-Z]+)/$',
         AccountDetail.as_view(), name='account-detail'),
-    url(r'^register/$', RegisterAccountView.as_view(), name='account-register'),
 ]
 
 
 urlpatterns = [
-    url(r'^.*$', IndexView.as_view(), name='index'),
 
     url(r'^api-docs/', include('rest_framework_swagger.urls')),
     url(r'^api/v1/notes/', include(note_urls)),
     url(r'^api/v1/tags/', include(tag_urls)),
     url(r'^api/v1/account/', include(account_urls)),
-    url(r'^api/v1/auth/login/', LoginView.as_view(), name='login'),
-    url(r'^api/v1/auth/logout/', LogoutView.as_view(), name='logout'),
+
+    url(r'^api/v1/auth/login/$', LoginView.as_view(), name='login'),
+    url(r'^api/v1/auth/logout/$', LogoutView.as_view(), name='logout'),
+    url(r'^api/v1/auth/register/$',
+        RegisterAccountView.as_view(), name='account-register'),
+
+    url(r'^.*$', IndexView.as_view(), name='index'),
 ]

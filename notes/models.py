@@ -1,8 +1,9 @@
 import datetime
 from django.utils.text import slugify
 from bson.objectid import ObjectId
-from mongoengine import Document, EmbeddedDocument, PULL
-from mongoengine.fields import *
+from django_mongoengine import Document, EmbeddedDocument
+from django_mongoengine.fields import *
+from mongoengine import PULL
 
 import logging
 logger = logging.getLogger(__name__)
@@ -44,10 +45,10 @@ class Note(Document):
     pub_date = DateTimeField(default=datetime.datetime.now, required=True)
     title = StringField(max_length=255, required=True)
     text = StringField(verbose_name="Text", required=True)
-    comments = ListField(EmbeddedDocumentField('Comment'))
+    comments = ListField(EmbeddedDocumentField('Comment'), blank=True)
     slug = StringField(max_length=60)
     is_published = BooleanField(default=False)
-    tags = ListField(ReferenceField(Tag, reverse_delete_rule=PULL))
+    tags = ListField(ReferenceField(Tag, reverse_delete_rule=PULL), blank=True)
 
     meta = {
         'allow_inheritance': True,

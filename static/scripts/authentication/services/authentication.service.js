@@ -42,14 +42,24 @@
     }
 
     function register(email, password, username) {
-        return $http.post('/api/v1/account/register/', {
-            'username': username,
-            'password': password,
-            'email': email
+
+         return $http({
+            method: 'POST',
+            url: '/api/v1/auth/register/',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRFToken': $cookies['csrftoken']
+            },
+            data: {
+                username: username,
+                password: password,
+                email: email
+            }
     }).then(registerSuccessFn, registerErrorFn);
 
         function registerSuccessFn(data, status, headers, config) {
-            Authentication.login(email, password);
+            Authentication.login(username, password);
         }
 
         function registerErrorFn(data, status, headers, config) {
@@ -58,9 +68,18 @@
     }
 
     function login(username, password) {
-        return $http.post('/api/v1/auth/login/', {
-            username: username,
-            password: password
+        return $http({
+            method: 'POST',
+            url: '/api/v1/auth/login/',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRFToken': $cookies['csrftoken']
+            },
+            data: {
+                username: username,
+                password: password
+            }
     }).then(loginSuccessFn, loginErrorFn);
 
 
@@ -70,7 +89,7 @@
         }
 
         function loginErrorFn(data, status, headers, config) {
-            console.error('Epic failure!');
+            console.error('Cannot login!', data, headers);
         }
     }
   }

@@ -3,10 +3,6 @@ from .base import *
 
 DEBUG = True
 
-DATABASES = {
-    'default': {'ENGINE': 'django.db.backends.dummy'}
-}
-
 MONGODB_NAME = "testdb"
 
 MONGO_DATABASE_OPTIONS = {

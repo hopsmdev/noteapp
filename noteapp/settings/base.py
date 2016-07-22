@@ -15,13 +15,32 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mongoengine.django.mongo_auth',
+    #'mongoengine.django.mongo_auth',
+
     'rest_framework',
     'rest_framework_mongoengine',
     'rest_framework_swagger',
     'authentication',
     'notes',
 ]
+
+INSTALLED_APPS += [
+    'mongoengine',
+    'django_mongoengine',
+    'django_mongoengine.mongo_auth',
+]
+
+"""
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+"""
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -94,7 +113,7 @@ REST_FRAMEWORK = {
     )
 }
 
-
+"""
 MONGOENGINE_USER_DOCUMENT = 'mongoengine.django.auth.User'
 AUTH_USER_MODEL = 'mongo_auth.MongoUser'
 AUTHENTICATION_BACKENDS = (
@@ -102,6 +121,26 @@ AUTHENTICATION_BACKENDS = (
 )
 SESSION_ENGINE = 'mongoengine.django.sessions'
 SESSION_SERIALIZER = 'mongoengine.django.sessions.BSONSerializer'
+"""
+
+# MongoDB settings
+MONGODB_DATABASES = {
+    'default': {'name': 'testdb'}
+}
+
+
+DATABASES = {
+    'default': {'ENGINE': 'django.db.backends.dummy'}
+}
+
+SESSION_ENGINE = 'django_mongoengine.sessions'
+AUTH_USER_MODEL = 'mongo_auth.MongoUser'
+AUTHENTICATION_BACKENDS = [
+    'django_mongoengine.mongo_auth.backends.MongoEngineBackend',
+]
+
+
+
 
 LOGGING = {
     'version': 1,

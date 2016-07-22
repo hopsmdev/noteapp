@@ -1,4 +1,4 @@
-from mongoengine.django.auth import User
+from django_mongoengine.mongo_auth.models import User
 
 
 class Account(User):

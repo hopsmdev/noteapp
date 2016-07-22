@@ -1,13 +1,10 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from django.utils.encoding import smart_text
-from django.contrib.auth import login, logout
-from mongoengine.django.auth import get_user, User
-
+from django.contrib.auth import login, logout, get_user, authenticate
 from rest_framework import permissions, status
 from rest_framework.response import Response
-from rest_framework.authentication import authenticate
+#from rest_framework.authentication import authenticate, get_user
 from rest_framework_mongoengine import generics as mongo_generics
 
 from authentication.models import Account
@@ -21,16 +18,33 @@ class RegisterAccountView(mongo_generics.CreateAPIView):
     serializer_class = AccountSerializer
 
     def create(self, request):
+
         serializer = self.serializer_class(data=request.data)
 
-        if serializer.is_valid():
-            Account.create_user(**serializer.validated_data)
+        try:
+            if serializer.is_valid(raise_exception=True):
+                user = Account.create_user(**serializer.validated_data)
+                print("REGISTER: ", user)
+                return Response(
+                    serializer.validated_data, status=status.HTTP_201_CREATED)
+            else:
+                return Response({
+                    'status': 'Bad request',
+                    'message': 'Account could not be created with received data.'
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as exc:
+            print(exc, request.data['username'])
+            return Response({
+                'status': 'Bad request',
+                'message': str(exc)
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(mongo_generics.GenericAPIView):
 
     permission_classes = [permissions.AllowAny]
     serializer_class = LoginSerializer
+    http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
 
@@ -40,19 +54,14 @@ class LoginView(mongo_generics.GenericAPIView):
         username = serializer.validated_data['username']
         password = serializer.validated_data['password']
 
-        account = authenticate(username=username, password=password)
+        print(username, password)
+
+        account = authenticate(
+            username=username, password=password)
 
         if account is not None:
             if account.is_active:
-                user = get_user(account.id)
-
-                # FIX to make mongoengine 0.9.0 works with Django 1.9.7
-                User._meta.pk = User._fields["id"]
-                User._meta.pk.value_to_string = lambda obj: smart_text(obj.pk)
-                User.backend = account.backend
-
-                login(request, user)
-
+                login(request, account)
                 return Response(LoginSerializer(account).data)
 
             else:

@@ -13,8 +13,7 @@
     <div class="collapse navbar-collapse" id="we-are-borg-navbar">
       <ul class="nav navbar-nav pull-right">
         {% if user.is_authenticated %}
-          <li><a href="/+{{ user.username }}">+{{ user.username }}</a></li>
-          <li><a href="/+{{ user.username }}/settings">Settings</a></li>
+          USER IS AUTHENTICATED
           <li><a href="javascript:void(0)" ng-click="vm.logout()">Logout</a></li>
         {% else %}
           <li><a href="/login">Login</a></li>

@@ -27,13 +27,9 @@ class AccountSerializer(DocumentSerializer):
 
     class Meta:
         model = Account
-        fields = ('id', 'email', 'username', 'date_joined',
-                  'is_superuser', 'first_name', 'last_name',
-                  'password', 'confirm_password', 'links')
+        fields = ('id', 'email', 'username', 'date_joined', 'first_name',
+                  'last_name', 'password', 'confirm_password', 'links')
         read_only_fields = ('date_joined',)
-
-    def create(self, validated_data):
-        return Account.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
