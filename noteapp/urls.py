@@ -9,7 +9,7 @@ from authentication.api.views import (
 
 
 note_urls = [
-    url(r'published^$', PublishedNoteList.as_view(), name='published-notes'),
+    url(r'^published/$', PublishedNoteList.as_view(), name='published-notes'),
     url(r'^(?P<id>[0-9a-zA-Z]+)/$',
         NoteDetail.as_view(), name='note-detail'),
     url(r'^(?P<slug>[0-9a-zA-Z]+)/$',

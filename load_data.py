@@ -50,6 +50,7 @@ short_note = Note(
     text="test note text",
     tags=[tag_a, tag_b],
     slug="short-note",
+    is_published=True,
     comments=[
         comment_auth1_1,
         comment_auth1_2,
@@ -59,6 +60,7 @@ long_note = Note(
     title="test long note",
     text="".join(str(i) for i in range(0, 100)),
     tags=[tag_a, tag_b, tag_c],
+    is_published=True,
     comments=[
         comment_auth1_1,
         comment_auth1_2,

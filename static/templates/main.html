@@ -2,21 +2,24 @@
     <!--Main column-->
     <div class="col-md-8">
 
-      <!--Post-->
-      <div class="post-wrapper">
-        <!--Post data-->
+      <div class="row" ng-cloak>
+          <div ng-repeat="note in vm.notes">
 
-        <h1 class="h1-responsive">Post title <small class="text-muted">Secondary text</small></h1>
-        <h5>Written by <a href="">John Doe</a>, 30.04.2016</h5>
+              <div class="post-wrapper">
 
-        <br>
+                <h1 class="h1-responsive">{{ note.title }} </h1>
+                <h6> {{ note.pub_date | date:'medium'}}</h6>
 
-        <!--Post excerpt-->
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, officia omnis. Vero nihil neque dignissimos hic voluptas quisquam amet porro, similique libero ullam veritatis tempora cumque voluptates harum. Repellendus, impedit.</p>
+                <br>
 
-        <!--"Read more" button-->
-        <button class="btn btn-primary">Read more</button>
-      </div> <!--/.Post-->
+                <div class="row-fluid">
+                    <p> {{ note.text }} </p>
+                </div>
+
+                <button class="btn btn-primary">Read more</button>
+              </div>
+          </div>
+      </div>
 
     </div> <!-- Main column-->
 

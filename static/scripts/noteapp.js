@@ -6,6 +6,7 @@
         'noteapp.config',
         'noteapp.routes',
         'noteapp.authentication',
+        'noteapp.notes',
         'noteapp.layout'
     ]);
 

@@ -5,35 +5,28 @@
     .module('noteapp.layout.controllers')
     .controller('IndexController', IndexController);
 
-  IndexController.$inject = ['$scope', 'Authentication'];
+  IndexController.$inject = ['$scope', 'Authentication', 'Notes'];
 
-  function IndexController($scope, Authentication) {
+  function IndexController($scope, Authentication, Notes) {
     var vm = this;
 
     vm.isAuthenticated = Authentication.isAuthenticated();
-    vm.posts = [];
+    vm.notes = [];
 
     activate();
 
     function activate() {
 
-      /**Posts.all().then(postsSuccessFn, postsErrorFn);
+      Notes.get_published().then(notesSuccessFn, notesErrorFn);
 
-      $scope.$on('post.created', function (event, post) {
-        vm.posts.unshift(post);
-      });
-
-      $scope.$on('post.created.error', function () {
-        vm.posts.shift();
-      });
-
-      function postsSuccessFn(data, status, headers, config) {
-        vm.posts = data.data;
+      function notesSuccessFn(data, status, headers, config) {
+        vm.notes = data.data;
+        console.log(data.data)
       }
 
-      function postsErrorFn(data, status, headers, config) {
-        Snackbar.error(data.error);
-      } */
+      function notesErrorFn(data, status, headers, config) {
+         console.error(data.error);
+      }
 
     }
   }
