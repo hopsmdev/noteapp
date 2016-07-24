@@ -1,25 +1,52 @@
-<nav class="navbar navbar-default" role="navigation" ng-controller="NavbarController as vm">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#we-are-borg-navbar">
-        <span class="sr-only">Toggle Navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">Noteapp</a>
-    </div> <!-- ./navbar-header -->
+<nav class="navbar navbar-dark primary-color-dark" role="navigation" ng-controller="NavbarController as vm">
+    <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#collapseEx">
+        <i class="fa fa-bars"></i>
+    </button>
 
-    <div class="collapse navbar-collapse" id="we-are-borg-navbar">
-      <ul class="nav navbar-nav pull-right">
-        {% if user.is_authenticated %}
-          USER IS AUTHENTICATED
-          <li><a href="javascript:void(0)" ng-click="vm.logout()">Logout</a></li>
-        {% else %}
-          <li><a href="/login">Login</a></li>
-          <li><a href="/register">Register</a></li>
-        {% endif %}
-      </ul>
-    </div> <!-- /.collapse.navbar-collapse -->
-  </div> <!-- /.container-fluid -->
+    <div class="container">
+
+        <div class="navbar-header collapse navbar-toggleable-xs" id="collapseEx">
+            <a class="navbar-brand" href="/" target="_blank">NoteApp</a>
+            <ul class="nav navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" type="button"
+                       id="dropdownMenu1" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Tags</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+                        <a class="dropdown-item" href="#">A</a>
+                        <a class="dropdown-item" href="#">B</a>
+                        <a class="dropdown-item" href="#">C</a>
+
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <form class="form-inline pull-xs-left">
+                        <input class="form-control" type="text" placeholder="Search">
+                    </form>
+                </li>
+            </form>
+            </ul>
+
+            <ul class="nav navbar-nav pull-xs-right">
+                {% if user.is_authenticated %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="javascript:void(0)" ng-click="vm.logout()">Logout</a></li>
+                {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="/login">Login</a></li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/register">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
 </nav>
+
