@@ -11,7 +11,7 @@
     var vm = this;
 
     vm.isAuthenticated = Authentication.isAuthenticated();
-    /**vm.posts = [];*/
+    vm.posts = [];
 
     activate();
 

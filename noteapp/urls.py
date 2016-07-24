@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from noteapp.views import IndexView
-from notes.api.views import NoteList, NoteDetail, NoteDetailSlug
+from notes.api.views import *
 from notes.api.views import TagList, TagDetail
 
 from authentication.api.views import (
@@ -9,11 +9,12 @@ from authentication.api.views import (
 
 
 note_urls = [
-    url(r'^$', NoteList.as_view(), name='user-list'),
+    url(r'published^$', PublishedNoteList.as_view(), name='published-notes'),
     url(r'^(?P<id>[0-9a-zA-Z]+)/$',
         NoteDetail.as_view(), name='note-detail'),
     url(r'^(?P<slug>[0-9a-zA-Z]+)/$',
         NoteDetailSlug.as_view(), name='note-detail-slug'),
+    url(r'^$', NoteList.as_view(), name='user-list'),
 ]
 
 tag_urls = [

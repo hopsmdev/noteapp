@@ -12,6 +12,13 @@ class NoteList(mongo_generics.ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
 
 
+class PublishedNoteList(mongo_generics.ListCreateAPIView):
+    model = Note
+    queryset = Note.objects(is_published=True)
+    serializer_class = NoteSerializer
+    permission_classes = [permissions.AllowAny]
+
+
 class NoteDetail(mongo_generics.RetrieveUpdateDestroyAPIView):
     model = Note
     queryset = Note.objects()

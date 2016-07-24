@@ -13,9 +13,10 @@ class Comment(EmbeddedDocument):
     _id = ObjectIdField(
         required=True, default=lambda: ObjectId(), primary_key=True)
     pub_date = DateTimeField(default=datetime.datetime.now, required=True)
-    author = StringField(verbose_name="Author", max_length=255, required=True)
-    email = EmailField(verbose_name="Email")
-    text = StringField(verbose_name="Comment", required=True)
+    author = StringField(verbose_name="Author", max_length=255,
+                         required=True, blank=True)
+    email = EmailField(verbose_name="Email", blank=True)
+    text = StringField(verbose_name="Comment", required=True, blank=True)
 
     def short_text(self):
         return ' '.join(self.text.split()[:20]) + " ..."  \
@@ -46,8 +47,8 @@ class Note(Document):
     title = StringField(max_length=255, required=True)
     text = StringField(verbose_name="Text", required=True)
     comments = ListField(EmbeddedDocumentField('Comment'), blank=True)
-    slug = StringField(max_length=60)
-    is_published = BooleanField(default=False)
+    slug = StringField(max_length=60, blank=True)
+    is_published = BooleanField(default=False, blank=True)
     tags = ListField(ReferenceField(Tag, reverse_delete_rule=PULL), blank=True)
 
     meta = {
@@ -82,6 +83,7 @@ class Note(Document):
             self.slug = slugify(self.title)[:60]
 
         kwargs['tags'] = self.__add_tags(tags=kwargs.get('tags'))
+        kwargs['slug'] = self.slug
 
         return super(Note, self).save(*args, **kwargs)
 

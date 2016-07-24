@@ -67,6 +67,7 @@ class NotePOSTApiTest(ApiTest):
             '/api/v1/notes/', json.dumps(data), content_type="application/json")
         response = NoteList.as_view()(request)
 
+        print(response.data)
         self.assertTrue(response.data['comments'])
         self.assertTrue(response.data['tags'])
         self.assertEqual(response.status_code, 201)

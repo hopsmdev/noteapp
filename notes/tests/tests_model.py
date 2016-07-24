@@ -60,21 +60,6 @@ class NoteModelTest(TestCaseMongo, TestDataFactory):
         notes = Note.objects()
         self.assertEqual(len(notes), 2)
 
-    def test_delete_comment_from_note(self):
-
-        note = Note.objects(slug="short-note").first()
-        comment_ids = [comment._id for comment in note.comments]
-        self.assertEqual(len(comment_ids), 3)
-
-        comment_to_remove = comment_ids[0]
-
-        Note.objects(slug="short-note").update_one(
-            pull__comments={'_id': comment_to_remove})
-
-        note.reload()
-        comment_ids = [comment._id for comment in note.comments]
-        self.assertEqual(len(comment_ids), 2)
-
     def test_delete_note_comment(self):
 
         self.short_note.remove(comments=[self.comment_auth1_1])
