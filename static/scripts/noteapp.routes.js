@@ -21,6 +21,10 @@
         controller: 'LoginController',
         controllerAs: 'vm',
         templateUrl: '/static/templates/authentication/login.html'
+    }).when('/about', {
+        controller: 'AboutController',
+        controllerAs: 'vm',
+        templateUrl: '/static/templates/about.html'
     }).otherwise('/');
 
   }
