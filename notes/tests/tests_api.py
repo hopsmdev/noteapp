@@ -19,6 +19,13 @@ class NoteGETApiTest(ApiTest):
         response = NoteList.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
+    def test_get_published_notes(self):
+
+        request = self.factory.get('/api/v1/notes/published/')
+        response = PublishedNoteList.as_view()(request)
+        print(response.data)
+        self.assertEqual(response.status_code, 200)
+
     def test_get_note_detail_id(self):
 
         _id = str(self.short_note.id)

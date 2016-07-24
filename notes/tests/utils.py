@@ -58,6 +58,7 @@ class TestDataFactory(object):
             text="test note text",
             tags=[self.tag_a, self.tag_b],
             slug="short-note",
+            is_published=True,
             comments=[
                 self.comment_auth1_1,
                 self.comment_auth1_2,
@@ -67,6 +68,7 @@ class TestDataFactory(object):
             title="test long note",
             text="".join(str(i) for i in range(0, 100)),
             tags=[self.tag_a, self.tag_b, self.tag_c],
+            is_published=True,
             comments=[
                 self.comment_auth1_1,
                 self.comment_auth1_2,
