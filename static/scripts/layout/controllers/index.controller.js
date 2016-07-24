@@ -5,17 +5,19 @@
     .module('noteapp.layout.controllers')
     .controller('IndexController', IndexController);
 
-  IndexController.$inject = ['$scope', 'Authentication', 'Notes'];
+  IndexController.$inject = ['$scope', 'Authentication', 'Notes', 'Tags'];
 
-  function IndexController($scope, Authentication, Notes) {
+  function IndexController($scope, Authentication, Notes, Tags) {
     var vm = this;
 
     vm.isAuthenticated = Authentication.isAuthenticated();
     vm.notes = [];
+    vm.tags = [];
 
-    activate();
+    get_published_notes();
+    get_tags()
 
-    function activate() {
+    function get_published_notes() {
 
       Notes.get_published().then(notesSuccessFn, notesErrorFn);
 
@@ -27,7 +29,22 @@
       function notesErrorFn(data, status, headers, config) {
          console.error(data.error);
       }
-
     }
+
+    function get_tags() {
+
+      Tags.all().then(tagsSuccessFn, tagsErrorFn);
+
+      function tagsSuccessFn(data, status, headers, config) {
+        vm.tags = data.data;
+        console.log(data.data)
+      }
+
+      function tagsErrorFn(data, status, headers, config) {
+         console.error(data.error);
+      }
+    }
+
+
   }
 })();

@@ -7,7 +7,6 @@
 
   NotesController.$inject = ['$scope', 'Notes'];
 
-
   function NotesController($scope, Notes) {
     var vm = this;
   }
